@@ -196,16 +196,37 @@ RCT_EXPORT_METHOD(
     }
 }
 
-RCT_EXPORT_METHOD(clearByName:(NSString *) name
-    resolver:(RCTPromiseResolveBlock)resolve
-    rejecter:(RCTPromiseRejectBlock)reject) {
-    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *c in cookieStorage.cookies) {
-      if ([[c name] isEqualToString:name]) {
-        [cookieStorage deleteCookie:c];
-      }
+RCT_EXPORT_METHOD(
+      clearByName:(NSString *)name
+      useWebKit:(BOOL)useWebKit
+      resolver:(RCTPromiseResolveBlock)resolve
+      rejecter:(RCTPromiseRejectBlock)reject)
+{
+    if (useWebKit) {
+        if (@available(iOS 11.0, *)) {
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
+                [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
+                    for(NSHTTPCookie *currentCookie in allCookies) {
+                        if ([[currentCookie name] isEqualToString:name]) {
+                            [cookieStore deleteCookie:currentCookie completionHandler:^{}];
+                        }
+                    }
+                    resolve(nil);
+                }];
+            });
+        } else {
+            reject(@"", NOT_AVAILABLE_ERROR_MESSAGE, nil);
+        }
+    } else {
+        NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+        for (NSHTTPCookie *c in cookieStorage.cookies) {
+            if ([[c name] isEqualToString:name]) {
+                [cookieStorage deleteCookie:c];
+            }
+        }
+        resolve(nil);
     }
-    resolve(nil);
 }
 
 RCT_EXPORT_METHOD(
