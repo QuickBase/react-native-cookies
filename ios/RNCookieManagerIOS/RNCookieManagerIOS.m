@@ -204,12 +204,26 @@ RCT_EXPORT_METHOD(
 {
     if (useWebKit) {
         if (@available(iOS 11.0, *)) {
+            
             dispatch_async(dispatch_get_main_queue(), ^(){
                 WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
+                
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         if ([[currentCookie name] isEqualToString:name]) {
-                            [cookieStore deleteCookie:currentCookie completionHandler:^{}];
+                            
+                            NSMutableDictionary<NSHTTPCookiePropertyKey, id> *cookieData =  [NSMutableDictionary dictionary];
+                            [cookieData setValue:currentCookie.name forKey:NSHTTPCookieName];
+                            [cookieData setValue:currentCookie.value forKey:NSHTTPCookieValue];
+                            [cookieData setValue:currentCookie.domain forKey:NSHTTPCookieDomain];
+                            [cookieData setValue:currentCookie.path forKey:NSHTTPCookiePath];
+                            
+
+                            
+                            NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieData];
+                            [cookieStore deleteCookie:newCookie completionHandler:^{}];
+                            
+
                         }
                     }
                     resolve(nil);
@@ -225,6 +239,23 @@ RCT_EXPORT_METHOD(
                 [cookieStorage deleteCookie:c];
             }
         }
+        resolve(nil);
+    }
+}
+
+RCT_EXPORT_METHOD(
+      forceDataStoreReload:(BOOL)useWebKit
+      webView:(WKWebView *)webView
+      resolver:(RCTPromiseResolveBlock)resolve
+      rejecter:(RCTPromiseRejectBlock)reject)
+{
+    if (@available(iOS 11.0, *)) {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                                                          completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
+            resolve(nil);
+        });
+    } else {
         resolve(nil);
     }
 }
