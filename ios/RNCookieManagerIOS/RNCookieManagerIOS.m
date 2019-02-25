@@ -241,7 +241,7 @@ RCT_EXPORT_METHOD(
   forceDataStoreLoad:(WKWebView *)webView
   useWebKit:(BOOL)useWebKit
   resolver:(RCTPromiseResolveBlock)resolve
-  rejecter:(RCTPromiseRejectBlock)reject)
+  rejecter:(RCTPromiseRejectBlock)reject
   )
 {
     if (@available(iOS 11.0, *)) {
