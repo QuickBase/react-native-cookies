@@ -208,9 +208,6 @@ RCT_EXPORT_METHOD(
             dispatch_async(dispatch_get_main_queue(), ^(){
                 WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
                 
-                [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
-                                       completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
-                
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         if ([[currentCookie name] isEqualToString:name]) {
@@ -242,6 +239,23 @@ RCT_EXPORT_METHOD(
                 [cookieStorage deleteCookie:c];
             }
         }
+        resolve(nil);
+    }
+}
+
+RCT_EXPORT_METHOD(
+      forceDataStoreReload:(BOOL)useWebKit
+      webView:(WKWebView *)webView
+      resolver:(RCTPromiseResolveBlock)resolve
+      rejecter:(RCTPromiseRejectBlock)reject)
+{
+    if (@available(iOS 11.0, *)) {
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                                                          completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
+            resolve(nil);
+        });
+    } else {
         resolve(nil);
     }
 }
