@@ -261,7 +261,7 @@ RCT_EXPORT_METHOD(
 }
 
 RCT_EXPORT_METHOD(
-    getAll:(BOOL)useWebKit
+    getAllWithWebKit:(BOOL)useWebKit
     resolver:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject)
 {
