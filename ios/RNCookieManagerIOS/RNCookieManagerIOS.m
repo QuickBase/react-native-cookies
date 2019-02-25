@@ -206,11 +206,10 @@ RCT_EXPORT_METHOD(
         if (@available(iOS 11.0, *)) {
             
             dispatch_async(dispatch_get_main_queue(), ^(){
-                
                 WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
-                // WORKAROUND: Force the creation of the datastore by calling a method on it.
-                [cookieStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
-                                                              completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
+                
+                [defaultDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                                       completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
                 
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
                     for(NSHTTPCookie *currentCookie in allCookies) {
