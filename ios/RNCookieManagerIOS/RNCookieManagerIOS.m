@@ -239,7 +239,8 @@ RCT_EXPORT_METHOD(
 
 RCT_EXPORT_METHOD(
   forceDataStoreLoad:(WKWebView *)webView
-  useWebKit:(BOOL)useWebKit
+  useWebKit:(BOOL)useWebKit,
+  cookie:(NSHTTPCookie)cookie,
   resolver:(RCTPromiseResolveBlock)resolve
   rejecter:(RCTPromiseRejectBlock)reject
   )
