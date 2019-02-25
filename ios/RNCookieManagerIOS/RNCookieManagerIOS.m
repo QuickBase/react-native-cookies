@@ -217,7 +217,7 @@ RCT_EXPORT_METHOD(
                             [cookieData setValue:currentCookie.path forKey:NSHTTPCookiePath];
                             
                             NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieData];
-                            [cookieStore deleteCookie:currentCookie completionHandler:^{}];
+                            [cookieStore deleteCookie:newCookie completionHandler:^{}];
                         }
                     }
                     resolve(nil);
