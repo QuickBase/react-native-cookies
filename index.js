@@ -29,6 +29,7 @@ module.exports = {
   clearByName: (name, useWebKit = false) => CookieManager.clearByName(name, useWebKit),
   get: (url, useWebKit = false) => CookieManager.get(url, useWebKit),
   set: (cookie, useWebKit = false) => CookieManager.set(cookie, useWebKit),
+  forceDataStoreLoad:(wkWebView, useWebKit = false) => CookieManager.forceDataStoreLoad(wkWebView, useWebKit),
 };
 
 for (var i = 0; i < functions.length; i++) {

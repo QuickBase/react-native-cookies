@@ -209,6 +209,14 @@ RCT_EXPORT_METHOD(
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         if ([[currentCookie name] isEqualToString:name]) {
+                            
+                            NSMutableDictionary<NSHTTPCookiePropertyKey, id> *cookieData =  [NSMutableDictionary dictionary];
+                            [cookieData setValue:currentCookie.name forKey:NSHTTPCookieName];
+                            [cookieData setValue:currentCookie.value forKey:NSHTTPCookieValue];
+                            [cookieData setValue:currentCookie.domain forKey:NSHTTPCookieDomain];
+                            [cookieData setValue:currentCookie.path forKey:NSHTTPCookiePath];
+                            
+                            NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieData];
                             [cookieStore deleteCookie:currentCookie completionHandler:^{}];
                         }
                     }
@@ -226,6 +234,25 @@ RCT_EXPORT_METHOD(
             }
         }
         resolve(nil);
+    }
+}
+
+RCT_EXPORT_METHOD(
+  forceDataStoreLoad:(WKWebView *)webView
+  useWebKit:(BOOL)useWebKit
+  resolver:(RCTPromiseResolveBlock)resolve
+  rejecter:(RCTPromiseRejectBlock)reject)
+  )
+{
+    if (@available(iOS 11.0, *)) {
+        [webView.configuration.websiteDataStore.httpCookieStore setCookie:cookie
+                                                        completionHandler:^{
+                                                            [webView loadRequest:request];
+                                                        }];
+        
+        // WORKAROUND: Force the creation of the datastore by calling a method on it.
+        [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                                                      completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
     }
 }
 
