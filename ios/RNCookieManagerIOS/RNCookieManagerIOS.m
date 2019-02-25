@@ -204,8 +204,14 @@ RCT_EXPORT_METHOD(
 {
     if (useWebKit) {
         if (@available(iOS 11.0, *)) {
+            
             dispatch_async(dispatch_get_main_queue(), ^(){
+                
                 WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
+                // WORKAROUND: Force the creation of the datastore by calling a method on it.
+                [cookieStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                                                              completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
+                
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         if ([[currentCookie name] isEqualToString:name]) {
@@ -216,8 +222,12 @@ RCT_EXPORT_METHOD(
                             [cookieData setValue:currentCookie.domain forKey:NSHTTPCookieDomain];
                             [cookieData setValue:currentCookie.path forKey:NSHTTPCookiePath];
                             
+
+                            
                             NSHTTPCookie *newCookie = [NSHTTPCookie cookieWithProperties:cookieData];
                             [cookieStore deleteCookie:newCookie completionHandler:^{}];
+                            
+
                         }
                     }
                     resolve(nil);
@@ -234,26 +244,6 @@ RCT_EXPORT_METHOD(
             }
         }
         resolve(nil);
-    }
-}
-
-RCT_EXPORT_METHOD(
-  forceDataStoreLoad:(WKWebView *)webView
-  useWebKit:(BOOL)useWebKit,
-  cookie:(NSHTTPCookie)cookie,
-  resolver:(RCTPromiseResolveBlock)resolve
-  rejecter:(RCTPromiseRejectBlock)reject
-  )
-{
-    if (@available(iOS 11.0, *)) {
-        [webView.configuration.websiteDataStore.httpCookieStore setCookie:cookie
-                                                        completionHandler:^{
-                                                            [webView loadRequest:request];
-                                                        }];
-        
-        // WORKAROUND: Force the creation of the datastore by calling a method on it.
-        [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
-                                                      completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
     }
 }
 
