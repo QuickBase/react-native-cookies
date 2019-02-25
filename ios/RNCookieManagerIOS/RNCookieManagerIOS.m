@@ -208,7 +208,7 @@ RCT_EXPORT_METHOD(
             dispatch_async(dispatch_get_main_queue(), ^(){
                 WKHTTPCookieStore *cookieStore = [[WKWebsiteDataStore defaultDataStore] httpCookieStore];
                 
-                [defaultDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
+                [webView.configuration.websiteDataStore fetchDataRecordsOfTypes:[NSSet<NSString *> setWithObject:WKWebsiteDataTypeCookies]
                                        completionHandler:^(NSArray<WKWebsiteDataRecord *> *records) {}];
                 
                 [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *allCookies) {
