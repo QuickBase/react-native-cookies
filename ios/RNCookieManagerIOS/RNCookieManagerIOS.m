@@ -244,7 +244,7 @@ RCT_EXPORT_METHOD(
 }
 
 RCT_EXPORT_METHOD(
-      forceDataStoreReload:(BOOL)useWebKit
+      forceDataStoreLoad:(BOOL)useWebKit
       webView:(WKWebView *)webView
       resolver:(RCTPromiseResolveBlock)resolve
       rejecter:(RCTPromiseRejectBlock)reject)
