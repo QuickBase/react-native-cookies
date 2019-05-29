@@ -1,0 +1,14 @@
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners, and concluded by the JIRA project 
+# in the #%JIRA_PROJECT format
+
+# These owners will be the default owners for everything in the repo, if necessary.  
+# Everything _MUST_ have a team as the owner at minimum, there are no exceptions to this policy.  
+# example:
+#*       @kclaxton                           #%SECURITY 
+#*       @<TEAM or INDIVIDUAL(s) go here>    #%JIRA_PROJECT
+
+# See https://github.com/blog/2392-introducing-code-owners, https://help.github.com/articles/about-codeowners/.
+# Patterns below match any files in the following directories and any of its subdirectories.
+
+* @bobbravo2 @Jrafalak @jwilliamson-qb @jhembree-qb @lfalkner @siddhantbenadikar @shikhar91939 #%RAP
