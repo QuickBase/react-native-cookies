@@ -94,7 +94,7 @@ RCT_EXPORT_METHOD(getFromResponse:(NSURL *)url
             NSHTTPCookie *cookie = [cookies objectAtIndex:i];
             [dics setObject:cookie.value forKey:cookie.name];
             [dics setObject:cookie.expiresDate forKey:cookie.expiresDate];
-            NSLog(@"cookie: name=%@, value=%@", cookie.name, cookie.value, cookie.expiresDate);
+            NSLog(@"cookie: name=%@, value=%@, expiresDate=%@", cookie.name, cookie.value, cookie.expiresDate);
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
         }
         resolve(dics);
