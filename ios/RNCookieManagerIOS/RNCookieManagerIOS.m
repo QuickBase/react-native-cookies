@@ -196,12 +196,12 @@ RCT_EXPORT_METHOD(
     }
 }
 
-RCT_EXPORT_METHOD(clearByName:(NSString *) name
+RCT_EXPORT_METHOD(clearByValue:(NSString *) value
     resolver:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject) {
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *c in cookieStorage.cookies) {
-      if ([[c name] isEqualToString:name]) {
+      if ([[c value] isEqualToString:value]) {
         [cookieStorage deleteCookie:c];
       }
     }

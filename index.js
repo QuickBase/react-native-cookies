@@ -21,12 +21,13 @@ if (Platform.OS === 'ios') {
 const functions = [
     'setFromResponse',
     'getFromResponse',
-    'clearByName'
+    'clearByValue'
 ];
 
 module.exports = {
   getAll: (useWebKit = false) => CookieManager.getAll(useWebKit),
   clearAll: (useWebKit = false) => CookieManager.clearAll(useWebKit),
+  clearByValue: (value) => CookieManager.clearByValue(value),
   get: (url, useWebKit = false) => CookieManager.get(url, useWebKit),
   set: (cookie, useWebKit = false) => CookieManager.set(cookie, useWebKit),
 };
