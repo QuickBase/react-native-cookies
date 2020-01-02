@@ -139,6 +139,9 @@ RCT_EXPORT_METHOD(
                             [cookies setObject:currentCookie.value forKey:currentCookie.name];
                             [cookies setObject:currentCookie.expiresDate forKey:currentCookie.expiresDate];
                         }
+                        if(currentCookie.expiresDate) {
+                            [cookies setObject:currentCookie.expiresDate forKey:currentCookie.expiresDate];
+                        }
                     }
                     resolve(cookies);
                 }];
