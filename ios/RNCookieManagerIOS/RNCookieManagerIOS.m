@@ -137,6 +137,7 @@ RCT_EXPORT_METHOD(
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         if([currentCookie.domain containsString:topLevelDomain]) {
                             [cookies setObject:currentCookie.value forKey:currentCookie.name];
+                            [cookies setObject:[self.formatter stringFromDate:currentCookie.expiresDate] forKey:currentCookie.expiresDate];
                         }
                     }
                     resolve(cookies);
