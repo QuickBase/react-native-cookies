@@ -215,7 +215,7 @@ RCT_EXPORT_METHOD(
                     for(NSHTTPCookie *currentCookie in allCookies) {
                         // Uses the NSHTTPCookie directly has no effect, nor deleted the cookie nor thrown an error.
                         // Create a new cookie with the given values and delete this one do the work.
-                        if (currentCookie.value == value) {
+                        if (currentCookie.value.isEqualToString(value)) {
                             NSMutableDictionary<NSHTTPCookiePropertyKey, id> *cookieData =  [NSMutableDictionary dictionary];
 
                             [cookieData setValue:currentCookie.name forKey:NSHTTPCookieName];
